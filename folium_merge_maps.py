@@ -1,6 +1,7 @@
 import csv
 import folium
 import pandas as pd
+from geopy.geocoders import Nominatim
 
 from folium_choropleth_map import fetch_geojson_for_countries, save_geojson_data
 from folium_markers_map import get_population_data, get_country_coordinates, \
@@ -8,6 +9,9 @@ from folium_markers_map import get_population_data, get_country_coordinates, \
 
 
 def plot_merged_map(population_data, countries):
+    # Initialize geolocator once
+    geolocator = Nominatim(user_agent="country_coordinates")
+
     # Initialize a map centered at a specific location
     folium_map = folium.Map(location=[0, 0], zoom_start=2)
 
@@ -17,7 +21,7 @@ def plot_merged_map(population_data, countries):
     # Generate folium Marker layers
     # Loop through population data and add markers to respective FeatureGroup
     for country, data in population_data.items():
-        lat, lon = get_country_coordinates(country)
+        lat, lon = get_country_coordinates(country, geolocator)
         if lat is not None and lon is not None:
             popup_content = f"<b>{country}</b><br>"
             for year, population in data.items():

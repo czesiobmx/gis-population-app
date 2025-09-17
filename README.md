@@ -1,5 +1,7 @@
 # gis-population-app
 
+![sample_merged_map](/readme_figures/sample_merged_map.png)
+
 ## Why This Project Matters
 
 This project is designed as a hands-on showcase of my skills in **Python, MySQL, Docker, data visualization, and GIS (Geographic Information Systems)**.  
