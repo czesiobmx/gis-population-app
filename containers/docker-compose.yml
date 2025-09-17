@@ -1,0 +1,35 @@
+services:
+  mysql-db:
+    build:
+      context: .
+      dockerfile: Dockerfile-db
+    container_name: mysql-db
+    env_file:
+      - ../.env
+    ports:
+      - 3306:3306
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+    networks:
+      - app-db-network
+
+  population-app:
+    build:
+      context: .
+      dockerfile: Dockerfile-app
+    container_name: population-app
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    volumes:
+      - ../:/app
+    stdin_open: true
+    tty: true
+    networks:
+      - app-db-network
+
+networks:
+  app-db-network:

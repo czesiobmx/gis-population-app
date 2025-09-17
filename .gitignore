@@ -1,0 +1,9 @@
+# Python
+__pycache__/
+*.pyc
+
+# Output/generated files
+*.html
+*.geojson
+*.csv
+graph.png

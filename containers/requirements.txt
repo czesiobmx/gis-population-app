@@ -1,0 +1,7 @@
+geopy
+folium
+pandas
+pycountry
+mysql-connector-python
+matplotlib
+python-dotenv
