@@ -4,7 +4,7 @@
 
 ## Why This Project Matters
 
-This project is a hands-on showcase of my skills in **Python, MySQL, Docker, and data visualization** — and reflects my interest in **GIS** (Geographic Information Systems). It demonstrates how I can design, build, and containerize a complete application that integrates multiple technologies — bringing together **development**, **data engineering**, and **DevOps practices** with **geospatial analysis**.
+This project is a hands-on showcase of my skills in **Python, MySQL, Docker, and data visualization** — and reflects my interest in **GIS** (Geographic Information Systems). It demonstrates how I can design, build, and containerize a&nbsp;complete application that integrates multiple technologies — bringing together **development**, **data engineering**, and **DevOps practices** with **geospatial analysis**.
 
 ### Skills Demonstrated
 - **Python**: building CLI tools, working with APIs, processing CSV and GeoJSON data.
@@ -17,8 +17,7 @@ This project is a hands-on showcase of my skills in **Python, MySQL, Docker, and
 
 ## Introduction
 
-This repository contains a simple GIS CLI Python application that works with continents, countries, and their population data.  
-It integrates with a MySQL database to store the data, and can be easily run using Docker containers (via `docker-compose`).
+This repository contains a simple GIS CLI Python application that works with continents, countries, and their population data. It integrates with a&nbsp;MySQL database to store the data, and can be easily run using Docker containers (via `docker-compose`).
 
 ### Main Features
 - Fetching population data for selected countries and years via the World Bank API [[1]](#references),
