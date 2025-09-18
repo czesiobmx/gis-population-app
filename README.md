@@ -4,18 +4,14 @@
 
 ## Why This Project Matters
 
-This project is designed as a hands-on showcase of my skills in **Python, MySQL, Docker, data visualization, and GIS (Geographic Information Systems)**.  
-It demonstrates how I can design, build, and containerize a complete application that integrates multiple technologies often used in DevOps, data-driven environments, and spatial data analysis.
+This project is a hands-on showcase of my skills in **Python, MySQL, Docker, and data visualization** — and reflects my interest in **GIS** (Geographic Information Systems). It demonstrates how I can design, build, and containerize a complete application that integrates multiple technologies — bringing together **development**, **data engineering**, and **DevOps practices** with **geospatial analysis**.
 
 ### Skills Demonstrated
-- **Python**: building CLI tools, working with APIs, processing CSV and GeoJSON data.  
-- **Databases (MySQL)**: schema creation, data insertion, and querying via Python integration.  
-- **Data Visualization & GIS**: creating trend graphs with `matplotlib` and interactive spatial maps with `folium`.  
-- **APIs & Data Integration**: fetching real-world data from the World Bank API and GeoJSON sources.  
-- **Docker & Docker Compose**: orchestrating multi-container environments (app + database).  
-- **Geospatial Analysis**: geocoding with `geopy`, working with country boundaries, choropleth mapping, and interactive map generation. 
-
-This application highlights my ability to combine **development**, **data engineering**, **DevOps practices**, and **GIS skills** into a single project — making it a strong example of my problem-solving and technical skills.
+- **Python**: building CLI tools, working with APIs, processing CSV and GeoJSON data.
+- **APIs & Data Integration**: fetching real-world data from the World Bank API and GeoJSON sources.   
+- **Databases (MySQL)**: schema creation, data insertion, and querying via Python integration.
+- **Docker & Docker Compose**: orchestrating multi-container environments (app + database).   
+- **Data Visualization & GIS**: creating trend graphs with `matplotlib`, interactive maps with `folium` and geocoding with `geopy`.
 
 ---
 
