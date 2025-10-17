@@ -7,3 +7,9 @@ __pycache__/
 *.geojson
 *.csv
 graph.png
+
+# kind-cluster files
+kind-config.yaml
+
+# devbox
+.devbox/

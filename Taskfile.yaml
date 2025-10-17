@@ -1,0 +1,25 @@
+version: "3"
+
+includes:
+  1-docker:
+    taskfile: ./docker/Taskfile.yaml
+    dir: ./docker
+  3-k8s:
+    taskfile: ./kubernetes/Taskfile.yaml
+    dir: ./kubernetes
+
+tasks:
+    2-kind:01-generate-config:
+      desc: Generate kind-config file with mounted host working directory
+      cmds:
+        - HOST_WORKDIR=${PWD} envsubst < kind-cluster/kind-config.yaml.TEMPLATE > kind-cluster/kind-config.yaml  
+
+    2-kind:02-create-cluster:
+      desc: Create a Kubernetes cluster using kind
+      cmds:
+        - kind create cluster --config kind-cluster/kind-config.yaml
+
+    2-kind:03-delete-cluster:
+      desc: Delete an existing kind Kubernetes cluster
+      cmds:
+        - kind delete cluster  

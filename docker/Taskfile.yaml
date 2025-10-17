@@ -1,0 +1,22 @@
+version: "3"
+
+tasks:
+  01-compose:
+    desc: Use docker-compose to bring up the app
+    cmds:
+      - docker compose -f docker-compose.yml up -d
+
+  02-log-into-population-app-container:
+    desc: Log into the population-app container
+    cmds: 
+      - docker exec -it population-app bash
+
+  03-log-into-mysql-db-container:
+    desc: Log into the mysql-db container
+    cmds: 
+      - docker exec -it mysql-db bash
+
+  04-delete-composed-containers:
+    desc: Use docker-compose to bring down the app
+    cmds:
+      - docker compose -f docker-compose.yml down

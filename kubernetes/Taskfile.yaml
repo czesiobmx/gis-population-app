@@ -1,0 +1,63 @@
+version: "3"
+
+tasks:
+  01-create-namespace:
+    desc: Create a namespace for the project
+    cmds:
+      - kubectl apply -f common/Namespace.yaml
+      - kubens gis-population-app
+
+  02-build-images:
+    desc: Build Docker images for the app and the db
+    cmds:
+      - docker build -f ../docker/Dockerfile-app -t population-app:latest ../docker/
+      - docker build -f ../docker/Dockerfile-db -t mysql-db:latest ../docker/
+
+  03-load-iamges-into-kind-cluster:
+    desc: Load the Docker images into the kind cluster
+    cmds:
+      - kind load docker-image population-app:latest
+      - kind load docker-image mysql-db:latest
+
+  04-create-db-k8s-secret:
+    desc: Create the k8s secret for the database credentials
+    cmds:
+      - |
+        kubectl create secret generic mysql-secret \
+          --from-env-file=../app/.env \
+          -n gis-population-app
+
+  05-deploy-mysql-db:
+    desc: Deploy the mysql-db to the kind cluster
+    cmds:
+      - kubectl apply -f mysql-db/Deployment.yaml
+      - kubectl apply -f mysql-db/Service.yaml
+
+  06-deploy-population-app:
+    desc: Deploy the population-app to the kind cluster
+    cmds:
+      - kubectl apply -f population-app/Deployment.yaml
+
+  07-log-into-population-app-pod:
+    desc: Log into the population-app pod
+    cmds:
+      - kubectl exec -it $(kubectl get pods -l app=population-app -o jsonpath="{.items[0].metadata.name}") -- bash
+
+  08-log-into-mysql-db-pod:
+    desc: Log into the mysql-db pod
+    cmds:
+      - kubectl exec -it $(kubectl get pods -l app=mysql-db -o jsonpath="{.items[0].metadata.name}") -- bash
+
+  09-delete-namespace:
+    desc: Delete the gis-population-app namespace with all its resources
+    cmds:
+      - kubectl delete -f common/Namespace.yaml
+
+  10-remove-images-from-kind-cluster:
+    desc: Remove the Docker images from the kind cluster
+    cmds:
+      - |
+        for node in $(kind get nodes); do
+          docker exec "$node" crictl rmi population-app:latest || true
+          docker exec "$node" crictl rmi mysql-db:latest || true
+        done

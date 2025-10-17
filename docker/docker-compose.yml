@@ -1,11 +1,12 @@
 services:
   mysql-db:
+    image: mysql-db:latest
     build:
       context: .
       dockerfile: Dockerfile-db
     container_name: mysql-db
     env_file:
-      - ../.env
+      - ../app/.env
     ports:
       - 3306:3306
     healthcheck:
@@ -17,6 +18,7 @@ services:
       - app-db-network
 
   population-app:
+    image: population-app:latest
     build:
       context: .
       dockerfile: Dockerfile-app
@@ -25,7 +27,7 @@ services:
       mysql-db:
         condition: service_healthy
     volumes:
-      - ../:/app
+      - ../app:/app
     stdin_open: true
     tty: true
     networks:

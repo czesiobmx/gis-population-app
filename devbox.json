@@ -1,0 +1,21 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.10.7/.schema/devbox.schema.json",
+  "packages": [
+    "kubectl@latest",
+    "kubectx@latest",
+    "kind@latest",
+    "k9s@latest",
+    "go-task@latest",
+    "envsubst@latest"
+  ],
+  "shell": {
+    "init_hook": [
+      "alias k='kubectl'",
+      "source <(kubectl completion bash)",
+      "complete -F __start_kubectl k",
+      "eval \"$(task --completion bash)\"",
+      "alias tl='task --list-all'"
+    ],
+    "scripts": {}
+  }
+}

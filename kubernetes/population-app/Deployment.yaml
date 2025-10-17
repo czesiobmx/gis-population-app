@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: population-app
+  namespace: gis-population-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: population-app
+  template:
+    metadata:
+      labels:
+        app: population-app
+    spec:
+      containers:
+        - name: population-app
+          image: population-app:latest
+          imagePullPolicy: IfNotPresent
+          stdin: true
+          tty: true
+          volumeMounts:
+            - name: app-code
+              mountPath: /app
+      volumes:
+        - name: app-code
+          hostPath:
+            path: /app        # Mounted from your host via Kind
+            type: Directory
