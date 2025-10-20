@@ -3,6 +3,8 @@ import sys
 from population_get import get_country_population
 from alpha2_contry_codes_lib import continent_codes
 import time
+import requests
+import concurrent.futures
 
 
 def fetch_countries(continent_name):
@@ -31,33 +33,41 @@ def show_countries(countries):
     print("+------------------------------------------+-------------+")
 
 
-def fetch_population(countries, year):
-    # Define a variable to keep track of the number of API requests
-    api_request_count = 0
+def fetch_population(countries, year, max_workers=10):
+    # Create a reusable requests session
+    session = requests.Session()
+    session.headers.update({"User-Agent": "PopulationFetcher/1.0"})
+
     country_data = {}
+    start_time = time.perf_counter()
 
-    for country in countries:
-        # wait before sending the request (throttling protection)
-        time.sleep(1)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = {
+            executor.submit(get_country_population, session, c.alpha_2, year): c for c in countries
+        }
 
-        start = time.perf_counter()
-        population = get_country_population(country.alpha_2, year)
-        elapsed = time.perf_counter() - start       
-
-        if population:
-            country_data[country.name] = population
-            api_request_count += 1
-            # Display the loading message with live updates
-            sys.stdout.write(f"\rFetching population data (API requests: {api_request_count})... Request for {country.name} ({year}) took {elapsed:0.2f} seconds.")
+        for i, future in enumerate(concurrent.futures.as_completed(futures), 1):
+            country = futures[future]
+            try:
+                pop = future.result()
+                if pop:
+                    country_data[country.name] = pop
+            except Exception as e:
+                print(f"[ERROR] {country.name}: {e}")
+            sys.stdout.write(f"\rFetched {i}/{len(countries)} countries...")
             sys.stdout.flush()
 
-    print("Population data:")
+    elapsed = time.perf_counter() - start_time
+    print(f"[INFO] Completed in {elapsed:.2f} seconds.\n")
+
+    # Print table
+    print("Population Data:")
     print("+-----------------------------------------+----------------+")
     print("| Country Name                            | Population     |")
     print("+-----------------------------------------+----------------+")
-    for country, population in country_data.items():
-        name_replaced = country.replace("ç", "c").replace("é", "e").replace("ü", "u").replace("ô", "o")
-        print(f"| {name_replaced:<39} | {population:>14,} |")
+    for country, pop in country_data.items():
+        name_fixed = country.replace("ç","c").replace("é","e").replace("ü","u").replace("ô","o")
+        print(f"| {name_fixed:<39} | {pop:>14,} |")
     print("+-----------------------------------------+----------------+")
 
     return country_data, year

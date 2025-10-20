@@ -14,30 +14,25 @@ def convert_country_name_to_code(country_name):
         return None
     
 
-def get_country_population(country, year):
+def get_country_population(session, country, year):
     # Convert country name to code if needed
     country_code = country.lower() if len(country) <= 3 else convert_country_name_to_code(country)
 
     # Define parameters for the API request
-    url = f"https://api.worldbank.org/v2/country/{country_code}/indicator/SP.POP.TOTL?date={year}"
-    params = {
-        "format": "json",
-    }
+    url = f"https://api.worldbank.org/v2/country/{country_code}/indicator/SP.POP.TOTL"
+    params = {"date": year, "format": "json"}
 
     # Make the API request
-    response = requests.get(url, params=params)
-
-    # Check if the request was successful
-    if response.status_code == 200:
+    try:
+        response = session.get(url, params=params, timeout=5)
+        response.raise_for_status()
         data = response.json()
 
-        # Extract population data from the response
-        if data and len(data) > 1 and isinstance(data[1], list) and data[1] and isinstance(data[1][0], dict) and "value" in data[1][0]:
-            population = data[1][0]["value"]
-            return population
-        else:
-            print(f"[WARNING] Population data not found or invalid for {country} in {year}.")
-            return None
-    else:
-        print("[ERROR] Failed to retrieve data from World Bank API")
-        return None
+        if data and len(data) > 1 and isinstance(data[1], list) and data[1]:
+            value = data[1][0].get("value")
+            if value is not None:
+                return value
+        print(f"[WARN] No valid population data for {country} ({year})")
+    except requests.RequestException as e:
+        print(f"[ERROR] {country}: {e}")
+    return None
