@@ -24,7 +24,7 @@ def get_country_population(session, country, year):
 
     # Make the API request
     try:
-        response = session.get(url, params=params, timeout=5)
+        response = session.get(url, params=params, timeout=30)
         response.raise_for_status()
         data = response.json()
 

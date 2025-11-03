@@ -1,0 +1,31 @@
+version: "3"
+
+tasks:
+  01-initialize:
+    desc: Initialize Terraform
+    cmds:
+      - terraform init
+
+  02-kind-cluster-setup:
+    desc: Create a kind cluster
+    cmds:
+      - terraform apply -auto-approve -target=module.kind-cluster -target=local_file.kubeconfig
+
+  03-creating-kubernetes-namespace:
+    desc: Create the Kubernetes namespace
+    cmds:
+      - terraform apply -auto-approve -target=module.kubernetes_resources.kubernetes_namespace.app_ns
+      - kubens gis-population-app
+
+  04-creating-kubernetes-resources:
+    desc: Create the Kubernetes resources
+    cmds:
+      - terraform apply -auto-approve
+
+  05-destroy:
+    desc: Destroy the kind cluster and all resources
+    cmds:
+      - terraform destroy -auto-approve
+      - kubectl config delete-context kind-kind
+      - kubectl config delete-cluster kind-kind
+      - kubectl config delete-user kind-kind

@@ -13,7 +13,7 @@ tasks:
       - docker build -f ../docker/Dockerfile-app -t population-app:latest ../docker/
       - docker build -f ../docker/Dockerfile-db -t mysql-db:latest ../docker/
 
-  03-load-iamges-into-kind-cluster:
+  03-load-images-into-kind-cluster:
     desc: Load the Docker images into the kind cluster
     cmds:
       - kind load docker-image population-app:latest

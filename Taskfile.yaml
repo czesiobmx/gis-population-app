@@ -7,6 +7,9 @@ includes:
   3-k8s:
     taskfile: ./kubernetes/Taskfile.yaml
     dir: ./kubernetes
+  4-terraform:
+    taskfile: ./terraform/Taskfile.yaml
+    dir: ./terraform
 
 tasks:
     2-kind:01-generate-config:

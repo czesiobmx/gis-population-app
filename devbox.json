@@ -6,7 +6,8 @@
     "kind@latest",
     "k9s@latest",
     "go-task@latest",
-    "envsubst@latest"
+    "envsubst@latest",
+    "terraform@latest"
   ],
   "shell": {
     "init_hook": [

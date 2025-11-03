@@ -13,3 +13,7 @@ kind-config.yaml
 
 # devbox
 .devbox/
+
+# terraform
+*.tfstate*
+*.terraform*

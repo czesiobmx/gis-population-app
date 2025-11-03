@@ -4,13 +4,14 @@
 
 ## Why This Project Matters
 
-This project is a hands-on showcase of my skills in **Python, MySQL, Docker, Kubernetes and data visualization** — and reflects my interest in **GIS** (Geographic Information Systems). It demonstrates how I can design, build, and containerize a&nbsp;complete application that integrates multiple technologies — bringing together **development**, **data engineering**, and **DevOps practices** with **geospatial analysis**.
+This project is a hands-on showcase of my skills in **Python, MySQL, Docker, Kubernetes, Terraform and data visualization** — and reflects my interest in **GIS** (Geographic Information Systems). It demonstrates how I can design, build, and containerize a&nbsp;complete application that integrates multiple technologies — bringing together **development**, **data engineering**, and **DevOps practices** with **geospatial analysis**.
 
 ### Skills Demonstrated
 - **Python**: building CLI tools, working with APIs, processing CSV and GeoJSON data.
 - **APIs & Data Integration**: fetching real-world data from the World Bank API and GeoJSON sources.   
 - **Databases (MySQL)**: schema creation, data insertion, and querying via Python integration.
-- **Docker & Kubernetes**: orchestrating multi-container environments (app + database).   
+- **Docker & Kubernetes**: orchestrating multi-container environments (app + database).
+- **Terraform**: implementing Infrastructure as Code (IaC) to automate environment provisioning and configuration.   
 - **Data Visualization & GIS**: creating trend graphs with `matplotlib`, interactive maps with `folium` and geocoding with `geopy`.
 - **Development & Automation**: creating a local development cluster using `kind` (Kubernetes-in-Docker), `devbox` (isolated dev environment) and `task` (task automation).
 
@@ -18,7 +19,7 @@ This project is a hands-on showcase of my skills in **Python, MySQL, Docker, Kub
 
 ## Introduction
 
-This repository contains a simple GIS CLI Python application that works with continents, countries, and their population data. It integrates with a MySQL database to store the data, and can be easily run using Docker containers (via `docker-compose` or Kubernetes).
+This repository contains a simple GIS CLI Python application that works with continents, countries, and their population data. It integrates with a MySQL database to store the data, and can be easily run using Docker containers — whether through `docker-compose`, Kubernetes, or Terraform.
 
 ### Main Features
 - Fetching population data for selected countries and years via the World Bank API [[1]](#references),
@@ -49,7 +50,7 @@ or follow the [Jetify Documentation](https://www.jetify.com/docs/devbox/installi
 
 Devbox allows you to create an isolated development environment (“box”) within your Linux distro and initialize a dedicated shell to work with specific tools, without affecting the rest of your Ubuntu system. It works similarly to Python’s .venv.
 
-In the main directory, the `devbox.json` file defines all dependencies to be installed — for example, `kubectl` (to manage Kubernetes), `kind` (to create a local Kubernetes cluster), or `go-task` (to automate command-based tasks).
+In the main directory, the `devbox.json` file defines all dependencies to be installed — for example, `kubectl` (to manage Kubernetes), `kind` (to create a local Kubernetes cluster), `go-task` (to automate command-based tasks), or `terraform` (to define infrastructure as code).
 
 Additionally, initialization hooks enable `kubectl` command completion and create useful aliases such as `k` for `kubectl` and `tl` for `task --list-all`.
 
@@ -126,7 +127,7 @@ For that purpose, a Kind (Kubernetes in Docker) cluster will be created, and the
 
 #### 3. Load the images into the Kind cluster
 
-`task 3-k8s:03-load-iamges-into-kind-cluster`
+`task 3-k8s:03-load-images-into-kind-cluster`
 
 #### 4. Create a Kubernetes secret for database credentials
 
@@ -155,6 +156,53 @@ For that purpose, a Kind (Kubernetes in Docker) cluster will be created, and the
 #### 10. Remove the Docker images from the Kind cluster
 
 `task 3-k8s:10-remove-images-from-kind-cluster`
+
+---
+
+## Terraform Approach
+
+You can also run the application using Terraform together with Kubernetes.  
+For this purpose, a local Kind cluster will be created using the Terraform Kind provisioner, and the application resources will be deployed to it using `.tf` templates.
+
+#### 1. Initialize Terraform
+
+`task 4-terraform:01-initialize`
+
+#### 2. Create a local Kind cluster to work with Kubernetes
+
+`task 4-terraform:02-kind-cluster-setup`
+
+#### 3. Create a Kubernetes namespace within your Kind cluster and set it as default
+
+`task 4-terraform:03-creating-kubernetes-namespace`
+
+#### 4. Build Docker images (if they haven't been built yet)
+
+`task 3-k8s:02-build-images`
+
+#### 5. Load the images into the Kind cluster
+
+`task 3-k8s:03-load-images-into-kind-cluster`
+
+#### 6. Create a Kubernetes secret for database credentials
+
+`task 3-k8s:04-create-db-k8s-secret`
+
+#### 7. Create other Kubernetes resources
+
+`task 4-terraform:04-creating-kubernetes-resources`
+
+#### 8. Log into the `population-app` pod
+
+`task 3-k8s:07-log-into-population-app-pod`
+
+#### 9. Log into the `mysql-db` pod
+
+`task 3-k8s:08-log-into-mysql-db-pod`
+
+#### 10. Destroy all resources created by Terraform
+
+`task 4-terraform:05-destroy`
 
 ---
 
@@ -264,4 +312,8 @@ Example:
 
 [7] ISO 3166-1 alpha-2 codes - Wikipedia: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
 
-[8] Kubernetes: Beginner to Pro: https://courses.devopsdirective.com/kubernetes-beginner-to-pro/lessons/00-introduction/01-main
+[8] Docker: Beigneer to Pro: https://courses.devopsdirective.com/docker-beginner-to-pro/lessons/00-introduction/01-main
+
+[9] Kubernetes: Beginner to Pro: https://courses.devopsdirective.com/kubernetes-beginner-to-pro/lessons/00-introduction/01-main
+
+[10] Terraform: Beginner to Pro: https://courses.devopsdirective.com/terraform-beginner-to-pro/lessons/00-introduction/01-main

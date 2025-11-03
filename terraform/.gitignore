@@ -1,0 +1,4 @@
+# terraform folder related files
+kind-cluster-config
+kind-config
+kind_kubeconfig.yaml
